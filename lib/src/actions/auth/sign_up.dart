@@ -5,6 +5,8 @@ abstract class SignUp with _$SignUp implements AppAction {
   const factory SignUp({
     @required String email,
     @required String password,
+    @required String firstName,
+    @required String lastName,
   }) = SignUp$;
 
   @Implements(UserAction)

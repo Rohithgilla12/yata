@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
       body: UserContainer(
         builder: (BuildContext context, AppUser user) {
           return Container(
-            child: Center(child: Text(user.firstName)),
+            child: Center(child: Text(user.name)),
           );
         },
       ),

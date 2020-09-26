@@ -20,6 +20,10 @@ abstract class AppUser implements Built<AppUser, AppUserBuilder> {
   @nullable
   String get profile;
 
+  String get name {
+    return '$firstName $lastName';
+  }
+
   @nullable
   bool get isCreated;
 

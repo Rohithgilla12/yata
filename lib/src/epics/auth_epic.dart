@@ -47,6 +47,8 @@ class AuthEpic {
             .signUpWithEmail(
               email: action.email,
               password: action.password,
+              firstName: action.firstName,
+              lastName: action.lastName,
             )
             .asStream()
             .map<AppAction>((AppUser user) => SignUp.successful(user))

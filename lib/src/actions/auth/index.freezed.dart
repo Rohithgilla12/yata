@@ -464,10 +464,16 @@ class _$SignUpTearOff {
   const _$SignUpTearOff();
 
 // ignore: unused_element
-  SignUp$ call({@required String email, @required String password}) {
+  SignUp$ call(
+      {@required String email,
+      @required String password,
+      @required String firstName,
+      @required String lastName}) {
     return SignUp$(
       email: email,
       password: password,
+      firstName: firstName,
+      lastName: lastName,
     );
   }
 
@@ -494,13 +500,15 @@ const $SignUp = _$SignUpTearOff();
 mixin _$SignUp {
   @optionalTypeArgs
   Result when<Result extends Object>(
-    Result $default(String email, String password), {
+    Result $default(
+        String email, String password, String firstName, String lastName), {
     @required Result successful(AppUser user),
     @required Result error(Object error),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>(
-    Result $default(String email, String password), {
+    Result $default(
+        String email, String password, String firstName, String lastName), {
     Result successful(AppUser user),
     Result error(Object error),
     @required Result orElse(),
@@ -539,7 +547,7 @@ class _$SignUpCopyWithImpl<$Res> implements $SignUpCopyWith<$Res> {
 abstract class $SignUp$CopyWith<$Res> {
   factory $SignUp$CopyWith(SignUp$ value, $Res Function(SignUp$) then) =
       _$SignUp$CopyWithImpl<$Res>;
-  $Res call({String email, String password});
+  $Res call({String email, String password, String firstName, String lastName});
 }
 
 /// @nodoc
@@ -555,28 +563,42 @@ class _$SignUp$CopyWithImpl<$Res> extends _$SignUpCopyWithImpl<$Res>
   $Res call({
     Object email = freezed,
     Object password = freezed,
+    Object firstName = freezed,
+    Object lastName = freezed,
   }) {
     return _then(SignUp$(
       email: email == freezed ? _value.email : email as String,
       password: password == freezed ? _value.password : password as String,
+      firstName: firstName == freezed ? _value.firstName : firstName as String,
+      lastName: lastName == freezed ? _value.lastName : lastName as String,
     ));
   }
 }
 
 /// @nodoc
 class _$SignUp$ implements SignUp$ {
-  const _$SignUp$({@required this.email, @required this.password})
+  const _$SignUp$(
+      {@required this.email,
+      @required this.password,
+      @required this.firstName,
+      @required this.lastName})
       : assert(email != null),
-        assert(password != null);
+        assert(password != null),
+        assert(firstName != null),
+        assert(lastName != null);
 
   @override
   final String email;
   @override
   final String password;
+  @override
+  final String firstName;
+  @override
+  final String lastName;
 
   @override
   String toString() {
-    return 'SignUp(email: $email, password: $password)';
+    return 'SignUp(email: $email, password: $password, firstName: $firstName, lastName: $lastName)';
   }
 
   @override
@@ -587,14 +609,22 @@ class _$SignUp$ implements SignUp$ {
                 const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.password, password) ||
                 const DeepCollectionEquality()
-                    .equals(other.password, password)));
+                    .equals(other.password, password)) &&
+            (identical(other.firstName, firstName) ||
+                const DeepCollectionEquality()
+                    .equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) ||
+                const DeepCollectionEquality()
+                    .equals(other.lastName, lastName)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(email) ^
-      const DeepCollectionEquality().hash(password);
+      const DeepCollectionEquality().hash(password) ^
+      const DeepCollectionEquality().hash(firstName) ^
+      const DeepCollectionEquality().hash(lastName);
 
   @override
   $SignUp$CopyWith<SignUp$> get copyWith =>
@@ -603,27 +633,29 @@ class _$SignUp$ implements SignUp$ {
   @override
   @optionalTypeArgs
   Result when<Result extends Object>(
-    Result $default(String email, String password), {
+    Result $default(
+        String email, String password, String firstName, String lastName), {
     @required Result successful(AppUser user),
     @required Result error(Object error),
   }) {
     assert($default != null);
     assert(successful != null);
     assert(error != null);
-    return $default(email, password);
+    return $default(email, password, firstName, lastName);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>(
-    Result $default(String email, String password), {
+    Result $default(
+        String email, String password, String firstName, String lastName), {
     Result successful(AppUser user),
     Result error(Object error),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if ($default != null) {
-      return $default(email, password);
+      return $default(email, password, firstName, lastName);
     }
     return orElse();
   }
@@ -658,11 +690,16 @@ class _$SignUp$ implements SignUp$ {
 }
 
 abstract class SignUp$ implements SignUp {
-  const factory SignUp$({@required String email, @required String password}) =
-      _$SignUp$;
+  const factory SignUp$(
+      {@required String email,
+      @required String password,
+      @required String firstName,
+      @required String lastName}) = _$SignUp$;
 
   String get email;
   String get password;
+  String get firstName;
+  String get lastName;
   $SignUp$CopyWith<SignUp$> get copyWith;
 }
 
@@ -727,7 +764,8 @@ class _$SignUpSuccessful implements SignUpSuccessful {
   @override
   @optionalTypeArgs
   Result when<Result extends Object>(
-    Result $default(String email, String password), {
+    Result $default(
+        String email, String password, String firstName, String lastName), {
     @required Result successful(AppUser user),
     @required Result error(Object error),
   }) {
@@ -740,7 +778,8 @@ class _$SignUpSuccessful implements SignUpSuccessful {
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>(
-    Result $default(String email, String password), {
+    Result $default(
+        String email, String password, String firstName, String lastName), {
     Result successful(AppUser user),
     Result error(Object error),
     @required Result orElse(),
@@ -849,7 +888,8 @@ class _$SignUpError implements SignUpError {
   @override
   @optionalTypeArgs
   Result when<Result extends Object>(
-    Result $default(String email, String password), {
+    Result $default(
+        String email, String password, String firstName, String lastName), {
     @required Result successful(AppUser user),
     @required Result error(Object error),
   }) {
@@ -862,7 +902,8 @@ class _$SignUpError implements SignUpError {
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>(
-    Result $default(String email, String password), {
+    Result $default(
+        String email, String password, String firstName, String lastName), {
     Result successful(AppUser user),
     Result error(Object error),
     @required Result orElse(),

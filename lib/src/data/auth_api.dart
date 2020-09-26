@@ -29,7 +29,7 @@ class AuthApi {
   Future<AppUser> getUser(String uid) async {
     final DocumentSnapshot snapshot = await _firestore.doc('users/$uid').get();
     if (snapshot.exists) {
-      return AppUser.fromJson(snapshot.data);
+      return AppUser.fromJson(snapshot.data());
     } else {
       return AppUser((AppUserBuilder b) => b
         ..isCreated = false
@@ -49,12 +49,22 @@ class AuthApi {
   Future<AppUser> signUpWithEmail({
     @required String email,
     @required String password,
+    @required String firstName,
+    @required String lastName,
   }) async {
     final UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
-    return getUser(userCredential.user.uid);
+    AppUser user = await getUser(userCredential.user.uid);
+    user = user.rebuild(
+      (AppUserBuilder b) => b
+        ..firstName = firstName
+        ..lastName = lastName,
+    );
+    await setUserDetails(user);
+    print('After updating AppUser : $user');
+    return getUser(user.uid);
   }
 
   Future<void> setUserDetails(AppUser user) async {

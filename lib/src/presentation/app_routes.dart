@@ -12,6 +12,6 @@ class AppRoutes {
   static final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
     home: (_) => const Home(),
     login: (_) => const LoginPage(),
-    signUp: (_) => const SingUpPage(),
+    signUp: (_) => const SignUpPage(),
   };
 }

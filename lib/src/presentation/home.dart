@@ -16,7 +16,7 @@ class Home extends StatelessWidget {
           if (user.isCreated) {
             return const HomePage();
           } else {
-            return const SingUpPage();
+            return const SignUpPage();
           }
         } else {
           return const LoginPage();
