@@ -1,5 +1,7 @@
 library actions;
 
+import 'dart:typed_data';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:yatp/src/models/index.dart';
 
@@ -35,4 +37,14 @@ abstract class InitializeApp with _$InitializeApp implements AppAction {
 
   @Implements(ErrorAction)
   const factory InitializeApp.error(Object error) = InitializeAppError;
+}
+
+@freezed
+abstract class SetWallpaper with _$SetWallpaper implements AppAction {
+  const factory SetWallpaper(ByteData byteData) = SetWallpaper$;
+
+  const factory SetWallpaper.successful(String result) = SetWallpaperSuccessful;
+
+  @Implements(ErrorAction)
+  const factory SetWallpaper.error(Object error) = SetWallpaperError;
 }

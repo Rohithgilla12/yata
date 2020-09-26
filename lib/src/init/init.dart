@@ -8,6 +8,7 @@ import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:yatp/src/actions/index.dart';
 import 'package:yatp/src/data/auth_api.dart';
+import 'package:yatp/src/data/storage_api.dart';
 import 'package:yatp/src/epics/app_epics.dart';
 import 'package:yatp/src/models/index.dart';
 import 'package:yatp/src/reducers/reducer.dart';
@@ -22,6 +23,7 @@ Future<Store<AppState>> init() async {
 
   final AppEpics appEpics = AppEpics(
     authApi: authApi,
+    storageApi: StorageApi(),
   );
 
   return Store<AppState>(

@@ -7,6 +7,7 @@ import 'package:yatp/src/models/auth/index.dart';
 import 'package:yatp/src/models/serializers.dart';
 
 export 'auth/index.dart';
+export 'todos/index.dart';
 
 part 'app_state.dart';
 part 'index.g.dart';

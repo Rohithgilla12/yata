@@ -428,3 +428,446 @@ abstract class InitializeAppError implements InitializeApp, ErrorAction {
   Object get error;
   $InitializeAppErrorCopyWith<InitializeAppError> get copyWith;
 }
+
+/// @nodoc
+class _$SetWallpaperTearOff {
+  const _$SetWallpaperTearOff();
+
+// ignore: unused_element
+  SetWallpaper$ call(ByteData byteData) {
+    return SetWallpaper$(
+      byteData,
+    );
+  }
+
+// ignore: unused_element
+  SetWallpaperSuccessful successful(String result) {
+    return SetWallpaperSuccessful(
+      result,
+    );
+  }
+
+// ignore: unused_element
+  SetWallpaperError error(Object error) {
+    return SetWallpaperError(
+      error,
+    );
+  }
+}
+
+/// @nodoc
+// ignore: unused_element
+const $SetWallpaper = _$SetWallpaperTearOff();
+
+/// @nodoc
+mixin _$SetWallpaper {
+  @optionalTypeArgs
+  Result when<Result extends Object>(
+    Result $default(ByteData byteData), {
+    @required Result successful(String result),
+    @required Result error(Object error),
+  });
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>(
+    Result $default(ByteData byteData), {
+    Result successful(String result),
+    Result error(Object error),
+    @required Result orElse(),
+  });
+  @optionalTypeArgs
+  Result map<Result extends Object>(
+    Result $default(SetWallpaper$ value), {
+    @required Result successful(SetWallpaperSuccessful value),
+    @required Result error(SetWallpaperError value),
+  });
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>(
+    Result $default(SetWallpaper$ value), {
+    Result successful(SetWallpaperSuccessful value),
+    Result error(SetWallpaperError value),
+    @required Result orElse(),
+  });
+}
+
+/// @nodoc
+abstract class $SetWallpaperCopyWith<$Res> {
+  factory $SetWallpaperCopyWith(
+          SetWallpaper value, $Res Function(SetWallpaper) then) =
+      _$SetWallpaperCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$SetWallpaperCopyWithImpl<$Res> implements $SetWallpaperCopyWith<$Res> {
+  _$SetWallpaperCopyWithImpl(this._value, this._then);
+
+  final SetWallpaper _value;
+  // ignore: unused_field
+  final $Res Function(SetWallpaper) _then;
+}
+
+/// @nodoc
+abstract class $SetWallpaper$CopyWith<$Res> {
+  factory $SetWallpaper$CopyWith(
+          SetWallpaper$ value, $Res Function(SetWallpaper$) then) =
+      _$SetWallpaper$CopyWithImpl<$Res>;
+  $Res call({ByteData byteData});
+}
+
+/// @nodoc
+class _$SetWallpaper$CopyWithImpl<$Res> extends _$SetWallpaperCopyWithImpl<$Res>
+    implements $SetWallpaper$CopyWith<$Res> {
+  _$SetWallpaper$CopyWithImpl(
+      SetWallpaper$ _value, $Res Function(SetWallpaper$) _then)
+      : super(_value, (v) => _then(v as SetWallpaper$));
+
+  @override
+  SetWallpaper$ get _value => super._value as SetWallpaper$;
+
+  @override
+  $Res call({
+    Object byteData = freezed,
+  }) {
+    return _then(SetWallpaper$(
+      byteData == freezed ? _value.byteData : byteData as ByteData,
+    ));
+  }
+}
+
+/// @nodoc
+class _$SetWallpaper$ implements SetWallpaper$ {
+  const _$SetWallpaper$(this.byteData) : assert(byteData != null);
+
+  @override
+  final ByteData byteData;
+
+  @override
+  String toString() {
+    return 'SetWallpaper(byteData: $byteData)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is SetWallpaper$ &&
+            (identical(other.byteData, byteData) ||
+                const DeepCollectionEquality()
+                    .equals(other.byteData, byteData)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(byteData);
+
+  @override
+  $SetWallpaper$CopyWith<SetWallpaper$> get copyWith =>
+      _$SetWallpaper$CopyWithImpl<SetWallpaper$>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  Result when<Result extends Object>(
+    Result $default(ByteData byteData), {
+    @required Result successful(String result),
+    @required Result error(Object error),
+  }) {
+    assert($default != null);
+    assert(successful != null);
+    assert(error != null);
+    return $default(byteData);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>(
+    Result $default(ByteData byteData), {
+    Result successful(String result),
+    Result error(Object error),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if ($default != null) {
+      return $default(byteData);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result map<Result extends Object>(
+    Result $default(SetWallpaper$ value), {
+    @required Result successful(SetWallpaperSuccessful value),
+    @required Result error(SetWallpaperError value),
+  }) {
+    assert($default != null);
+    assert(successful != null);
+    assert(error != null);
+    return $default(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>(
+    Result $default(SetWallpaper$ value), {
+    Result successful(SetWallpaperSuccessful value),
+    Result error(SetWallpaperError value),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if ($default != null) {
+      return $default(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SetWallpaper$ implements SetWallpaper {
+  const factory SetWallpaper$(ByteData byteData) = _$SetWallpaper$;
+
+  ByteData get byteData;
+  $SetWallpaper$CopyWith<SetWallpaper$> get copyWith;
+}
+
+/// @nodoc
+abstract class $SetWallpaperSuccessfulCopyWith<$Res> {
+  factory $SetWallpaperSuccessfulCopyWith(SetWallpaperSuccessful value,
+          $Res Function(SetWallpaperSuccessful) then) =
+      _$SetWallpaperSuccessfulCopyWithImpl<$Res>;
+  $Res call({String result});
+}
+
+/// @nodoc
+class _$SetWallpaperSuccessfulCopyWithImpl<$Res>
+    extends _$SetWallpaperCopyWithImpl<$Res>
+    implements $SetWallpaperSuccessfulCopyWith<$Res> {
+  _$SetWallpaperSuccessfulCopyWithImpl(SetWallpaperSuccessful _value,
+      $Res Function(SetWallpaperSuccessful) _then)
+      : super(_value, (v) => _then(v as SetWallpaperSuccessful));
+
+  @override
+  SetWallpaperSuccessful get _value => super._value as SetWallpaperSuccessful;
+
+  @override
+  $Res call({
+    Object result = freezed,
+  }) {
+    return _then(SetWallpaperSuccessful(
+      result == freezed ? _value.result : result as String,
+    ));
+  }
+}
+
+/// @nodoc
+class _$SetWallpaperSuccessful implements SetWallpaperSuccessful {
+  const _$SetWallpaperSuccessful(this.result) : assert(result != null);
+
+  @override
+  final String result;
+
+  @override
+  String toString() {
+    return 'SetWallpaper.successful(result: $result)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is SetWallpaperSuccessful &&
+            (identical(other.result, result) ||
+                const DeepCollectionEquality().equals(other.result, result)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(result);
+
+  @override
+  $SetWallpaperSuccessfulCopyWith<SetWallpaperSuccessful> get copyWith =>
+      _$SetWallpaperSuccessfulCopyWithImpl<SetWallpaperSuccessful>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  Result when<Result extends Object>(
+    Result $default(ByteData byteData), {
+    @required Result successful(String result),
+    @required Result error(Object error),
+  }) {
+    assert($default != null);
+    assert(successful != null);
+    assert(error != null);
+    return successful(result);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>(
+    Result $default(ByteData byteData), {
+    Result successful(String result),
+    Result error(Object error),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (successful != null) {
+      return successful(result);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result map<Result extends Object>(
+    Result $default(SetWallpaper$ value), {
+    @required Result successful(SetWallpaperSuccessful value),
+    @required Result error(SetWallpaperError value),
+  }) {
+    assert($default != null);
+    assert(successful != null);
+    assert(error != null);
+    return successful(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>(
+    Result $default(SetWallpaper$ value), {
+    Result successful(SetWallpaperSuccessful value),
+    Result error(SetWallpaperError value),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (successful != null) {
+      return successful(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SetWallpaperSuccessful implements SetWallpaper {
+  const factory SetWallpaperSuccessful(String result) =
+      _$SetWallpaperSuccessful;
+
+  String get result;
+  $SetWallpaperSuccessfulCopyWith<SetWallpaperSuccessful> get copyWith;
+}
+
+/// @nodoc
+abstract class $SetWallpaperErrorCopyWith<$Res> {
+  factory $SetWallpaperErrorCopyWith(
+          SetWallpaperError value, $Res Function(SetWallpaperError) then) =
+      _$SetWallpaperErrorCopyWithImpl<$Res>;
+  $Res call({Object error});
+}
+
+/// @nodoc
+class _$SetWallpaperErrorCopyWithImpl<$Res>
+    extends _$SetWallpaperCopyWithImpl<$Res>
+    implements $SetWallpaperErrorCopyWith<$Res> {
+  _$SetWallpaperErrorCopyWithImpl(
+      SetWallpaperError _value, $Res Function(SetWallpaperError) _then)
+      : super(_value, (v) => _then(v as SetWallpaperError));
+
+  @override
+  SetWallpaperError get _value => super._value as SetWallpaperError;
+
+  @override
+  $Res call({
+    Object error = freezed,
+  }) {
+    return _then(SetWallpaperError(
+      error == freezed ? _value.error : error,
+    ));
+  }
+}
+
+@Implements(ErrorAction)
+
+/// @nodoc
+class _$SetWallpaperError implements SetWallpaperError {
+  const _$SetWallpaperError(this.error) : assert(error != null);
+
+  @override
+  final Object error;
+
+  @override
+  String toString() {
+    return 'SetWallpaper.error(error: $error)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is SetWallpaperError &&
+            (identical(other.error, error) ||
+                const DeepCollectionEquality().equals(other.error, error)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(error);
+
+  @override
+  $SetWallpaperErrorCopyWith<SetWallpaperError> get copyWith =>
+      _$SetWallpaperErrorCopyWithImpl<SetWallpaperError>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  Result when<Result extends Object>(
+    Result $default(ByteData byteData), {
+    @required Result successful(String result),
+    @required Result error(Object error),
+  }) {
+    assert($default != null);
+    assert(successful != null);
+    assert(error != null);
+    return error(this.error);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>(
+    Result $default(ByteData byteData), {
+    Result successful(String result),
+    Result error(Object error),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (error != null) {
+      return error(this.error);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result map<Result extends Object>(
+    Result $default(SetWallpaper$ value), {
+    @required Result successful(SetWallpaperSuccessful value),
+    @required Result error(SetWallpaperError value),
+  }) {
+    assert($default != null);
+    assert(successful != null);
+    assert(error != null);
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>(
+    Result $default(SetWallpaper$ value), {
+    Result successful(SetWallpaperSuccessful value),
+    Result error(SetWallpaperError value),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SetWallpaperError implements SetWallpaper, ErrorAction {
+  const factory SetWallpaperError(Object error) = _$SetWallpaperError;
+
+  Object get error;
+  $SetWallpaperErrorCopyWith<SetWallpaperError> get copyWith;
+}

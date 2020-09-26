@@ -27,6 +27,10 @@ dependencies:
   meta: ^1.2.3
   overlay_support: ^1.0.5
   path_provider: ^1.6.14
+  wallpaper_manager: ^1.0.10
+  flutter_cache_manager: ^1.4.2
+  image_gallery_saver: ^1.5.0
+  native_screenshot: ^0.0.4
 
 
 dev_dependencies:
