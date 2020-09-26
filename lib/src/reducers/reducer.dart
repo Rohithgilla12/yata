@@ -13,6 +13,10 @@ AppState reducer(AppState state, dynamic action) {
   }
   print(action);
 
+  if (action is Logout) {
+    return AppState();
+  }
+
   return state.rebuild((AppStateBuilder b) {
     b
       ..auth = authReducer(state.auth, action).toBuilder()

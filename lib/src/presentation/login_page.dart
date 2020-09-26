@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:yatp/src/actions/index.dart';
+import 'package:yatp/src/models/index.dart';
 import 'package:yatp/src/presentation/app_routes.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,7 +15,12 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _email, _password;
 
-  void _onSubmit() {}
+  void _onSubmit() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      StoreProvider.of<AppState>(context).dispatch(Login(email: _email, password: _password));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

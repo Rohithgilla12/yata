@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:yatp/src/actions/auth/index.dart';
+import 'package:yatp/src/actions/index.dart';
 import 'package:yatp/src/containers/user_container.dart';
 import 'package:yatp/src/models/index.dart';
 
@@ -14,7 +17,13 @@ class HomePage extends StatelessWidget {
       body: UserContainer(
         builder: (BuildContext context, AppUser user) {
           return Container(
-            child: Center(child: Text(user.name)),
+            child: Column(
+              children: <Widget>[
+                Center(
+                  child: Text(user.name),
+                ),
+              ],
+            ),
           );
         },
       ),

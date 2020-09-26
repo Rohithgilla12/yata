@@ -17,6 +17,7 @@ class AuthEpic {
       TypedEpic<AppState, SignUp$>(_signUp),
       TypedEpic<AppState, Login$>(_login),
       TypedEpic<AppState, UpdateUserDetails$>(_updateUserDetails),
+      TypedEpic<AppState, Logout$>(_logout),
     ]);
   }
 
@@ -53,5 +54,14 @@ class AuthEpic {
             .asStream()
             .map<AppAction>((AppUser user) => SignUp.successful(user))
             .onErrorReturnWith((dynamic error) => SignUp.error(error)));
+  }
+
+  Stream<AppAction> _logout(Stream<Logout$> actions, EpicStore<AppState> store) {
+    return actions //
+        .flatMap((Logout$ action) => _authApi
+            .logout()
+            .asStream()
+            .mapTo<AppAction>(const Logout.successful())
+            .onErrorReturnWith((dynamic error) => Logout.error(error)));
   }
 }

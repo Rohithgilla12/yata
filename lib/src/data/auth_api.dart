@@ -31,9 +31,11 @@ class AuthApi {
     if (snapshot.exists) {
       return AppUser.fromJson(snapshot.data());
     } else {
-      return AppUser((AppUserBuilder b) => b
-        ..isCreated = false
-        ..uid = uid);
+      return AppUser(
+        (AppUserBuilder b) => b
+          ..isCreated = false
+          ..uid = uid,
+      );
     }
   }
 
@@ -71,4 +73,6 @@ class AuthApi {
     user = user.rebuild((AppUserBuilder b) => b.isCreated = true);
     await _firestore.doc('users/${user.uid}').set(user.json);
   }
+
+  Future<void> logout() async => await _firebaseAuth.signOut();
 }
