@@ -10,6 +10,12 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(AppState.serializer)
       ..add(AppUser.serializer)
       ..add(AuthState.serializer)
+      ..add(Todo.serializer)
+      ..add(TodoState.serializer)
+      ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(String), const FullType(Todo)]),
+          () => new MapBuilder<String, Todo>())
       ..addBuilderFactory(
           const FullType(BuiltSet, const [const FullType(String)]),
           () => new SetBuilder<String>()))

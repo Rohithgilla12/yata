@@ -30,7 +30,7 @@ dependencies:
   wallpaper_manager: ^1.0.10
   flutter_cache_manager: ^1.4.2
   image_gallery_saver: ^1.5.0
-  native_screenshot: ^0.0.4
+  flutter_slidable: ^0.5.7
 
 
 dev_dependencies:

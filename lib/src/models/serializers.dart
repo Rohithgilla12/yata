@@ -11,6 +11,8 @@ part 'serializers.g.dart';
   AppUser,
   AppState,
   AuthState,
+  TodoState,
+  Todo,
 ])
 Serializers serializers = (_$serializers.toBuilder() //
       ..addPlugin(StandardJsonPlugin()))

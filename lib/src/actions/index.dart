@@ -6,6 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:yatp/src/models/index.dart';
 
 export 'auth/index.dart';
+export 'todos/index.dart';
 
 part 'index.freezed.dart';
 
