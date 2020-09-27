@@ -21,6 +21,9 @@ class _$AppStateSerializer implements StructuredSerializer<AppState> {
       'auth',
       serializers.serialize(object.auth,
           specifiedType: const FullType(AuthState)),
+      'todo',
+      serializers.serialize(object.todo,
+          specifiedType: const FullType(TodoState)),
       'pendingActions',
       serializers.serialize(object.pendingActions,
           specifiedType:
@@ -45,6 +48,10 @@ class _$AppStateSerializer implements StructuredSerializer<AppState> {
           result.auth.replace(serializers.deserialize(value,
               specifiedType: const FullType(AuthState)) as AuthState);
           break;
+        case 'todo':
+          result.todo.replace(serializers.deserialize(value,
+              specifiedType: const FullType(TodoState)) as TodoState);
+          break;
         case 'pendingActions':
           result.pendingActions.replace(serializers.deserialize(value,
                   specifiedType:
@@ -62,14 +69,19 @@ class _$AppState extends AppState {
   @override
   final AuthState auth;
   @override
+  final TodoState todo;
+  @override
   final BuiltSet<String> pendingActions;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
 
-  _$AppState._({this.auth, this.pendingActions}) : super._() {
+  _$AppState._({this.auth, this.todo, this.pendingActions}) : super._() {
     if (auth == null) {
       throw new BuiltValueNullFieldError('AppState', 'auth');
+    }
+    if (todo == null) {
+      throw new BuiltValueNullFieldError('AppState', 'todo');
     }
     if (pendingActions == null) {
       throw new BuiltValueNullFieldError('AppState', 'pendingActions');
@@ -88,18 +100,21 @@ class _$AppState extends AppState {
     if (identical(other, this)) return true;
     return other is AppState &&
         auth == other.auth &&
+        todo == other.todo &&
         pendingActions == other.pendingActions;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, auth.hashCode), pendingActions.hashCode));
+    return $jf($jc(
+        $jc($jc(0, auth.hashCode), todo.hashCode), pendingActions.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('AppState')
           ..add('auth', auth)
+          ..add('todo', todo)
           ..add('pendingActions', pendingActions))
         .toString();
   }
@@ -112,6 +127,10 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   AuthStateBuilder get auth => _$this._auth ??= new AuthStateBuilder();
   set auth(AuthStateBuilder auth) => _$this._auth = auth;
 
+  TodoStateBuilder _todo;
+  TodoStateBuilder get todo => _$this._todo ??= new TodoStateBuilder();
+  set todo(TodoStateBuilder todo) => _$this._todo = todo;
+
   SetBuilder<String> _pendingActions;
   SetBuilder<String> get pendingActions =>
       _$this._pendingActions ??= new SetBuilder<String>();
@@ -123,6 +142,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   AppStateBuilder get _$this {
     if (_$v != null) {
       _auth = _$v.auth?.toBuilder();
+      _todo = _$v.todo?.toBuilder();
       _pendingActions = _$v.pendingActions?.toBuilder();
       _$v = null;
     }
@@ -148,12 +168,16 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
     try {
       _$result = _$v ??
           new _$AppState._(
-              auth: auth.build(), pendingActions: pendingActions.build());
+              auth: auth.build(),
+              todo: todo.build(),
+              pendingActions: pendingActions.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'auth';
         auth.build();
+        _$failedField = 'todo';
+        todo.build();
         _$failedField = 'pendingActions';
         pendingActions.build();
       } catch (e) {

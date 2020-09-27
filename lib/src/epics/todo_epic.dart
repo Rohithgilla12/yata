@@ -13,7 +13,7 @@ class TodoEpic {
 
   final TodoApi _todoApi;
 
-  Epic<AppState> get epic {
+  Epic<AppState> get epics {
     return combineEpics(<Epic<AppState>>[
       TypedEpic<AppState, CreateTodo$>(_createTodo),
       _listenForTodos,

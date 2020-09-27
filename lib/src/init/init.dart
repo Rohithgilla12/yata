@@ -9,6 +9,7 @@ import 'package:redux_epics/redux_epics.dart';
 import 'package:yatp/src/actions/index.dart';
 import 'package:yatp/src/data/auth_api.dart';
 import 'package:yatp/src/data/storage_api.dart';
+import 'package:yatp/src/data/todo_api.dart';
 import 'package:yatp/src/epics/app_epics.dart';
 import 'package:yatp/src/models/index.dart';
 import 'package:yatp/src/reducers/reducer.dart';
@@ -16,14 +17,18 @@ import 'package:yatp/src/reducers/reducer.dart';
 Future<Store<AppState>> init() async {
   await Firebase.initializeApp();
 
+  final FirebaseFirestore firebaseInstance = FirebaseFirestore.instance;
   final AuthApi authApi = AuthApi(
     firebaseAuth: FirebaseAuth.instance,
-    firebaseFirestore: FirebaseFirestore.instance,
+    firebaseFirestore: firebaseInstance,
   );
+
+  final TodoApi todoApi = TodoApi(store: firebaseInstance);
 
   final AppEpics appEpics = AppEpics(
     authApi: authApi,
     storageApi: StorageApi(),
+    todoApi: todoApi,
   );
 
   return Store<AppState>(

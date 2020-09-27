@@ -9,6 +9,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 
   AuthState get auth;
 
+  TodoState get todo;
+
   BuiltSet<String> get pendingActions;
 
   Map<String, dynamic> get json => serializers.serializeWith(serializer, this) as Map<String, dynamic>;

@@ -4,24 +4,31 @@ import 'package:rxdart/rxdart.dart';
 import 'package:yatp/src/actions/index.dart';
 import 'package:yatp/src/data/auth_api.dart';
 import 'package:yatp/src/data/storage_api.dart';
+import 'package:yatp/src/data/todo_api.dart';
 import 'package:yatp/src/epics/auth_epic.dart';
+import 'package:yatp/src/epics/todo_epic.dart';
 import 'package:yatp/src/models/index.dart';
 
 class AppEpics {
   const AppEpics({
     @required AuthApi authApi,
     @required StorageApi storageApi,
+    @required TodoApi todoApi,
   })  : assert(authApi != null),
         assert(storageApi != null),
+        assert(todoApi != null),
         _storageApi = storageApi,
+        _todoApi = todoApi,
         _authApi = authApi;
 
   final AuthApi _authApi;
   final StorageApi _storageApi;
+  final TodoApi _todoApi;
 
   Epic<AppState> get epics {
     return combineEpics(<Epic<AppState>>[
       AuthEpic(authApi: _authApi).epics,
+      TodoEpic(todoApi: _todoApi).epics,
       TypedEpic<AppState, InitializeApp$>(_initializeApp),
       TypedEpic<AppState, SetWallpaper$>(_setWallpaper),
     ]);

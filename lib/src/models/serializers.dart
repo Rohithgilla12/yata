@@ -15,5 +15,32 @@ part 'serializers.g.dart';
   Todo,
 ])
 Serializers serializers = (_$serializers.toBuilder() //
+      ..add(DateTimeSerializer())
       ..addPlugin(StandardJsonPlugin()))
     .build();
+
+class DateTimeSerializer implements PrimitiveSerializer<DateTime> {
+  final bool structured = false;
+  @override
+  final Iterable<Type> types = <Type>[DateTime];
+  @override
+  final String wireName = 'DateTime';
+
+  @override
+  Object serialize(Serializers serializers, DateTime dateTime, {FullType specifiedType = FullType.unspecified}) {
+    if (!dateTime.isUtc) {
+      return dateTime.toUtc().microsecondsSinceEpoch;
+    } else {
+      return dateTime.microsecondsSinceEpoch;
+    }
+  }
+
+  @override
+  DateTime deserialize(Serializers serializers, Object serialized, {FullType specifiedType = FullType.unspecified}) {
+    if (serialized is String) {
+      return DateTime.parse(serialized);
+    } else {
+      return DateTime.fromMicrosecondsSinceEpoch(serialized, isUtc: true).toLocal();
+    }
+  }
+}

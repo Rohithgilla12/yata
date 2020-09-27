@@ -2,6 +2,7 @@ import 'package:yatp/src/actions/index.dart';
 import 'package:yatp/src/models/index.dart';
 import 'package:yatp/src/reducers/auth_reducer.dart';
 import 'package:yatp/src/reducers/pending_actions_reducers.dart';
+import 'package:yatp/src/reducers/todo_reducer.dart';
 
 AppState reducer(AppState state, dynamic action) {
   if (action is ErrorAction) {
@@ -20,6 +21,7 @@ AppState reducer(AppState state, dynamic action) {
   return state.rebuild((AppStateBuilder b) {
     b
       ..auth = authReducer(state.auth, action).toBuilder()
+      ..todo = todoReducers(state.todo, action).toBuilder()
       ..pendingActions = pendingActions(state.pendingActions, action).toBuilder();
   });
 }
