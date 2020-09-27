@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:yatp/src/actions/index.dart';
+import 'package:yatp/src/containers/is_logging_in_container.dart';
 import 'package:yatp/src/models/index.dart';
 import 'package:yatp/src/presentation/app_routes.dart';
 
@@ -18,7 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   void _onSubmit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      StoreProvider.of<AppState>(context).dispatch(Login(email: _email, password: _password));
+      StoreProvider.of<AppState>(context)
+          .dispatch(Login.start(email: _email, password: _password, result: (AppAction action) {}));
     }
   }
 
@@ -77,17 +79,26 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 16.0),
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                width: MediaQuery.of(context).size.width,
-                child: RaisedButton(
-                  onPressed: _onSubmit,
-                  child: Text(
-                    'Login',
-                    style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.black),
-                  ),
-                  color: Colors.white,
-                ),
+              IsLoggingInContainer(
+                builder: (BuildContext context, bool isLoading) {
+                  if (isLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return Container(
+                    padding: const EdgeInsets.all(16.0),
+                    width: MediaQuery.of(context).size.width,
+                    child: RaisedButton(
+                      onPressed: _onSubmit,
+                      child: Text(
+                        'Login',
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.black),
+                      ),
+                      color: Colors.white,
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 8.0),
               Container(

@@ -14,24 +14,33 @@ class _$LoginTearOff {
   const _$LoginTearOff();
 
 // ignore: unused_element
-  Login$ call({@required String email, @required String password}) {
+  Login$ start(
+      {@required String email,
+      @required String password,
+      @required void Function(AppAction) result,
+      String pendingId = _kLoginPendingId}) {
     return Login$(
       email: email,
       password: password,
+      result: result,
+      pendingId: pendingId,
     );
   }
 
 // ignore: unused_element
-  LoginSuccessful successful(AppUser user) {
+  LoginSuccessful successful(AppUser user,
+      [String pendingId = _kLoginPendingId]) {
     return LoginSuccessful(
       user,
+      pendingId,
     );
   }
 
 // ignore: unused_element
-  LoginError error(Object error) {
+  LoginError error(Object error, [String pendingId = _kLoginPendingId]) {
     return LoginError(
       error,
+      pendingId,
     );
   }
 }
@@ -42,38 +51,46 @@ const $Login = _$LoginTearOff();
 
 /// @nodoc
 mixin _$Login {
+  String get pendingId;
+
   @optionalTypeArgs
-  Result when<Result extends Object>(
-    Result $default(String email, String password), {
-    @required Result successful(AppUser user),
-    @required Result error(Object error),
+  Result when<Result extends Object>({
+    @required
+        Result start(String email, String password,
+            void Function(AppAction) result, String pendingId),
+    @required Result successful(AppUser user, String pendingId),
+    @required Result error(Object error, String pendingId),
   });
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>(
-    Result $default(String email, String password), {
-    Result successful(AppUser user),
-    Result error(Object error),
+  Result maybeWhen<Result extends Object>({
+    Result start(String email, String password, void Function(AppAction) result,
+        String pendingId),
+    Result successful(AppUser user, String pendingId),
+    Result error(Object error, String pendingId),
     @required Result orElse(),
   });
   @optionalTypeArgs
-  Result map<Result extends Object>(
-    Result $default(Login$ value), {
+  Result map<Result extends Object>({
+    @required Result start(Login$ value),
     @required Result successful(LoginSuccessful value),
     @required Result error(LoginError value),
   });
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>(
-    Result $default(Login$ value), {
+  Result maybeMap<Result extends Object>({
+    Result start(Login$ value),
     Result successful(LoginSuccessful value),
     Result error(LoginError value),
     @required Result orElse(),
   });
+
+  $LoginCopyWith<Login> get copyWith;
 }
 
 /// @nodoc
 abstract class $LoginCopyWith<$Res> {
   factory $LoginCopyWith(Login value, $Res Function(Login) then) =
       _$LoginCopyWithImpl<$Res>;
+  $Res call({String pendingId});
 }
 
 /// @nodoc
@@ -83,13 +100,27 @@ class _$LoginCopyWithImpl<$Res> implements $LoginCopyWith<$Res> {
   final Login _value;
   // ignore: unused_field
   final $Res Function(Login) _then;
+
+  @override
+  $Res call({
+    Object pendingId = freezed,
+  }) {
+    return _then(_value.copyWith(
+      pendingId: pendingId == freezed ? _value.pendingId : pendingId as String,
+    ));
+  }
 }
 
 /// @nodoc
-abstract class $Login$CopyWith<$Res> {
+abstract class $Login$CopyWith<$Res> implements $LoginCopyWith<$Res> {
   factory $Login$CopyWith(Login$ value, $Res Function(Login$) then) =
       _$Login$CopyWithImpl<$Res>;
-  $Res call({String email, String password});
+  @override
+  $Res call(
+      {String email,
+      String password,
+      void Function(AppAction) result,
+      String pendingId});
 }
 
 /// @nodoc
@@ -105,28 +136,47 @@ class _$Login$CopyWithImpl<$Res> extends _$LoginCopyWithImpl<$Res>
   $Res call({
     Object email = freezed,
     Object password = freezed,
+    Object result = freezed,
+    Object pendingId = freezed,
   }) {
     return _then(Login$(
       email: email == freezed ? _value.email : email as String,
       password: password == freezed ? _value.password : password as String,
+      result: result == freezed
+          ? _value.result
+          : result as void Function(AppAction),
+      pendingId: pendingId == freezed ? _value.pendingId : pendingId as String,
     ));
   }
 }
 
+@Implements(ActionStart)
+
 /// @nodoc
 class _$Login$ implements Login$ {
-  const _$Login$({@required this.email, @required this.password})
+  const _$Login$(
+      {@required this.email,
+      @required this.password,
+      @required this.result,
+      this.pendingId = _kLoginPendingId})
       : assert(email != null),
-        assert(password != null);
+        assert(password != null),
+        assert(result != null),
+        assert(pendingId != null);
 
   @override
   final String email;
   @override
   final String password;
+  @override
+  final void Function(AppAction) result;
+  @JsonKey(defaultValue: _kLoginPendingId)
+  @override
+  final String pendingId;
 
   @override
   String toString() {
-    return 'Login(email: $email, password: $password)';
+    return 'Login.start(email: $email, password: $password, result: $result, pendingId: $pendingId)';
   }
 
   @override
@@ -137,14 +187,21 @@ class _$Login$ implements Login$ {
                 const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.password, password) ||
                 const DeepCollectionEquality()
-                    .equals(other.password, password)));
+                    .equals(other.password, password)) &&
+            (identical(other.result, result) ||
+                const DeepCollectionEquality().equals(other.result, result)) &&
+            (identical(other.pendingId, pendingId) ||
+                const DeepCollectionEquality()
+                    .equals(other.pendingId, pendingId)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(email) ^
-      const DeepCollectionEquality().hash(password);
+      const DeepCollectionEquality().hash(password) ^
+      const DeepCollectionEquality().hash(result) ^
+      const DeepCollectionEquality().hash(pendingId);
 
   @override
   $Login$CopyWith<Login$> get copyWith =>
@@ -152,76 +209,87 @@ class _$Login$ implements Login$ {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>(
-    Result $default(String email, String password), {
-    @required Result successful(AppUser user),
-    @required Result error(Object error),
+  Result when<Result extends Object>({
+    @required
+        Result start(String email, String password,
+            void Function(AppAction) result, String pendingId),
+    @required Result successful(AppUser user, String pendingId),
+    @required Result error(Object error, String pendingId),
   }) {
-    assert($default != null);
+    assert(start != null);
     assert(successful != null);
     assert(error != null);
-    return $default(email, password);
+    return start(email, password, result, pendingId);
   }
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>(
-    Result $default(String email, String password), {
-    Result successful(AppUser user),
-    Result error(Object error),
+  Result maybeWhen<Result extends Object>({
+    Result start(String email, String password, void Function(AppAction) result,
+        String pendingId),
+    Result successful(AppUser user, String pendingId),
+    Result error(Object error, String pendingId),
     @required Result orElse(),
   }) {
     assert(orElse != null);
-    if ($default != null) {
-      return $default(email, password);
+    if (start != null) {
+      return start(email, password, result, pendingId);
     }
     return orElse();
   }
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>(
-    Result $default(Login$ value), {
+  Result map<Result extends Object>({
+    @required Result start(Login$ value),
     @required Result successful(LoginSuccessful value),
     @required Result error(LoginError value),
   }) {
-    assert($default != null);
+    assert(start != null);
     assert(successful != null);
     assert(error != null);
-    return $default(this);
+    return start(this);
   }
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>(
-    Result $default(Login$ value), {
+  Result maybeMap<Result extends Object>({
+    Result start(Login$ value),
     Result successful(LoginSuccessful value),
     Result error(LoginError value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
-    if ($default != null) {
-      return $default(this);
+    if (start != null) {
+      return start(this);
     }
     return orElse();
   }
 }
 
-abstract class Login$ implements Login {
-  const factory Login$({@required String email, @required String password}) =
-      _$Login$;
+abstract class Login$ implements Login, ActionStart {
+  const factory Login$(
+      {@required String email,
+      @required String password,
+      @required void Function(AppAction) result,
+      String pendingId}) = _$Login$;
 
   String get email;
   String get password;
+  void Function(AppAction) get result;
+  @override
+  String get pendingId;
+  @override
   $Login$CopyWith<Login$> get copyWith;
 }
 
 /// @nodoc
-abstract class $LoginSuccessfulCopyWith<$Res> {
+abstract class $LoginSuccessfulCopyWith<$Res> implements $LoginCopyWith<$Res> {
   factory $LoginSuccessfulCopyWith(
           LoginSuccessful value, $Res Function(LoginSuccessful) then) =
       _$LoginSuccessfulCopyWithImpl<$Res>;
-  $Res call({AppUser user});
+  @override
+  $Res call({AppUser user, String pendingId});
 }
 
 /// @nodoc
@@ -237,25 +305,32 @@ class _$LoginSuccessfulCopyWithImpl<$Res> extends _$LoginCopyWithImpl<$Res>
   @override
   $Res call({
     Object user = freezed,
+    Object pendingId = freezed,
   }) {
     return _then(LoginSuccessful(
       user == freezed ? _value.user : user as AppUser,
+      pendingId == freezed ? _value.pendingId : pendingId as String,
     ));
   }
 }
 
-@Implements(UserAction)
+@Implements(ActionDone)
 
 /// @nodoc
 class _$LoginSuccessful implements LoginSuccessful {
-  const _$LoginSuccessful(this.user) : assert(user != null);
+  const _$LoginSuccessful(this.user, [this.pendingId = _kLoginPendingId])
+      : assert(user != null),
+        assert(pendingId != null);
 
   @override
   final AppUser user;
+  @JsonKey(defaultValue: _kLoginPendingId)
+  @override
+  final String pendingId;
 
   @override
   String toString() {
-    return 'Login.successful(user: $user)';
+    return 'Login.successful(user: $user, pendingId: $pendingId)';
   }
 
   @override
@@ -263,12 +338,17 @@ class _$LoginSuccessful implements LoginSuccessful {
     return identical(this, other) ||
         (other is LoginSuccessful &&
             (identical(other.user, user) ||
-                const DeepCollectionEquality().equals(other.user, user)));
+                const DeepCollectionEquality().equals(other.user, user)) &&
+            (identical(other.pendingId, pendingId) ||
+                const DeepCollectionEquality()
+                    .equals(other.pendingId, pendingId)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(user);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(user) ^
+      const DeepCollectionEquality().hash(pendingId);
 
   @override
   $LoginSuccessfulCopyWith<LoginSuccessful> get copyWith =>
@@ -276,40 +356,43 @@ class _$LoginSuccessful implements LoginSuccessful {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>(
-    Result $default(String email, String password), {
-    @required Result successful(AppUser user),
-    @required Result error(Object error),
+  Result when<Result extends Object>({
+    @required
+        Result start(String email, String password,
+            void Function(AppAction) result, String pendingId),
+    @required Result successful(AppUser user, String pendingId),
+    @required Result error(Object error, String pendingId),
   }) {
-    assert($default != null);
+    assert(start != null);
     assert(successful != null);
     assert(error != null);
-    return successful(user);
+    return successful(user, pendingId);
   }
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>(
-    Result $default(String email, String password), {
-    Result successful(AppUser user),
-    Result error(Object error),
+  Result maybeWhen<Result extends Object>({
+    Result start(String email, String password, void Function(AppAction) result,
+        String pendingId),
+    Result successful(AppUser user, String pendingId),
+    Result error(Object error, String pendingId),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (successful != null) {
-      return successful(user);
+      return successful(user, pendingId);
     }
     return orElse();
   }
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>(
-    Result $default(Login$ value), {
+  Result map<Result extends Object>({
+    @required Result start(Login$ value),
     @required Result successful(LoginSuccessful value),
     @required Result error(LoginError value),
   }) {
-    assert($default != null);
+    assert(start != null);
     assert(successful != null);
     assert(error != null);
     return successful(this);
@@ -317,8 +400,8 @@ class _$LoginSuccessful implements LoginSuccessful {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>(
-    Result $default(Login$ value), {
+  Result maybeMap<Result extends Object>({
+    Result start(Login$ value),
     Result successful(LoginSuccessful value),
     Result error(LoginError value),
     @required Result orElse(),
@@ -331,19 +414,24 @@ class _$LoginSuccessful implements LoginSuccessful {
   }
 }
 
-abstract class LoginSuccessful implements Login, UserAction {
-  const factory LoginSuccessful(AppUser user) = _$LoginSuccessful;
+abstract class LoginSuccessful implements Login, ActionDone {
+  const factory LoginSuccessful(AppUser user, [String pendingId]) =
+      _$LoginSuccessful;
 
   AppUser get user;
+  @override
+  String get pendingId;
+  @override
   $LoginSuccessfulCopyWith<LoginSuccessful> get copyWith;
 }
 
 /// @nodoc
-abstract class $LoginErrorCopyWith<$Res> {
+abstract class $LoginErrorCopyWith<$Res> implements $LoginCopyWith<$Res> {
   factory $LoginErrorCopyWith(
           LoginError value, $Res Function(LoginError) then) =
       _$LoginErrorCopyWithImpl<$Res>;
-  $Res call({Object error});
+  @override
+  $Res call({Object error, String pendingId});
 }
 
 /// @nodoc
@@ -358,25 +446,33 @@ class _$LoginErrorCopyWithImpl<$Res> extends _$LoginCopyWithImpl<$Res>
   @override
   $Res call({
     Object error = freezed,
+    Object pendingId = freezed,
   }) {
     return _then(LoginError(
       error == freezed ? _value.error : error,
+      pendingId == freezed ? _value.pendingId : pendingId as String,
     ));
   }
 }
 
+@Implements(ActionDone)
 @Implements(ErrorAction)
 
 /// @nodoc
 class _$LoginError implements LoginError {
-  const _$LoginError(this.error) : assert(error != null);
+  const _$LoginError(this.error, [this.pendingId = _kLoginPendingId])
+      : assert(error != null),
+        assert(pendingId != null);
 
   @override
   final Object error;
+  @JsonKey(defaultValue: _kLoginPendingId)
+  @override
+  final String pendingId;
 
   @override
   String toString() {
-    return 'Login.error(error: $error)';
+    return 'Login.error(error: $error, pendingId: $pendingId)';
   }
 
   @override
@@ -384,12 +480,17 @@ class _$LoginError implements LoginError {
     return identical(this, other) ||
         (other is LoginError &&
             (identical(other.error, error) ||
-                const DeepCollectionEquality().equals(other.error, error)));
+                const DeepCollectionEquality().equals(other.error, error)) &&
+            (identical(other.pendingId, pendingId) ||
+                const DeepCollectionEquality()
+                    .equals(other.pendingId, pendingId)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(error);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(error) ^
+      const DeepCollectionEquality().hash(pendingId);
 
   @override
   $LoginErrorCopyWith<LoginError> get copyWith =>
@@ -397,40 +498,43 @@ class _$LoginError implements LoginError {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>(
-    Result $default(String email, String password), {
-    @required Result successful(AppUser user),
-    @required Result error(Object error),
+  Result when<Result extends Object>({
+    @required
+        Result start(String email, String password,
+            void Function(AppAction) result, String pendingId),
+    @required Result successful(AppUser user, String pendingId),
+    @required Result error(Object error, String pendingId),
   }) {
-    assert($default != null);
+    assert(start != null);
     assert(successful != null);
     assert(error != null);
-    return error(this.error);
+    return error(this.error, pendingId);
   }
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>(
-    Result $default(String email, String password), {
-    Result successful(AppUser user),
-    Result error(Object error),
+  Result maybeWhen<Result extends Object>({
+    Result start(String email, String password, void Function(AppAction) result,
+        String pendingId),
+    Result successful(AppUser user, String pendingId),
+    Result error(Object error, String pendingId),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (error != null) {
-      return error(this.error);
+      return error(this.error, pendingId);
     }
     return orElse();
   }
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>(
-    Result $default(Login$ value), {
+  Result map<Result extends Object>({
+    @required Result start(Login$ value),
     @required Result successful(LoginSuccessful value),
     @required Result error(LoginError value),
   }) {
-    assert($default != null);
+    assert(start != null);
     assert(successful != null);
     assert(error != null);
     return error(this);
@@ -438,8 +542,8 @@ class _$LoginError implements LoginError {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>(
-    Result $default(Login$ value), {
+  Result maybeMap<Result extends Object>({
+    Result start(Login$ value),
     Result successful(LoginSuccessful value),
     Result error(LoginError value),
     @required Result orElse(),
@@ -452,10 +556,13 @@ class _$LoginError implements LoginError {
   }
 }
 
-abstract class LoginError implements Login, ErrorAction {
-  const factory LoginError(Object error) = _$LoginError;
+abstract class LoginError implements Login, ActionDone, ErrorAction {
+  const factory LoginError(Object error, [String pendingId]) = _$LoginError;
 
   Object get error;
+  @override
+  String get pendingId;
+  @override
   $LoginErrorCopyWith<LoginError> get copyWith;
 }
 
@@ -847,30 +954,37 @@ class _$SignUpTearOff {
   const _$SignUpTearOff();
 
 // ignore: unused_element
-  SignUp$ call(
+  SignUp$ start(
       {@required String email,
       @required String password,
       @required String firstName,
-      @required String lastName}) {
+      @required String lastName,
+      @required void Function(AppAction) result,
+      String pendingId = _kSignUpPendingId}) {
     return SignUp$(
       email: email,
       password: password,
       firstName: firstName,
       lastName: lastName,
+      result: result,
+      pendingId: pendingId,
     );
   }
 
 // ignore: unused_element
-  SignUpSuccessful successful(AppUser user) {
+  SignUpSuccessful successful(AppUser user,
+      [String pendingId = _kSignUpPendingId]) {
     return SignUpSuccessful(
       user,
+      pendingId,
     );
   }
 
 // ignore: unused_element
-  SignUpError error(Object error) {
+  SignUpError error(Object error, [String pendingId = _kSignUpPendingId]) {
     return SignUpError(
       error,
+      pendingId,
     );
   }
 }
@@ -881,40 +995,46 @@ const $SignUp = _$SignUpTearOff();
 
 /// @nodoc
 mixin _$SignUp {
+  String get pendingId;
+
   @optionalTypeArgs
-  Result when<Result extends Object>(
-    Result $default(
-        String email, String password, String firstName, String lastName), {
-    @required Result successful(AppUser user),
-    @required Result error(Object error),
+  Result when<Result extends Object>({
+    @required
+        Result start(String email, String password, String firstName,
+            String lastName, void Function(AppAction) result, String pendingId),
+    @required Result successful(AppUser user, String pendingId),
+    @required Result error(Object error, String pendingId),
   });
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>(
-    Result $default(
-        String email, String password, String firstName, String lastName), {
-    Result successful(AppUser user),
-    Result error(Object error),
+  Result maybeWhen<Result extends Object>({
+    Result start(String email, String password, String firstName,
+        String lastName, void Function(AppAction) result, String pendingId),
+    Result successful(AppUser user, String pendingId),
+    Result error(Object error, String pendingId),
     @required Result orElse(),
   });
   @optionalTypeArgs
-  Result map<Result extends Object>(
-    Result $default(SignUp$ value), {
+  Result map<Result extends Object>({
+    @required Result start(SignUp$ value),
     @required Result successful(SignUpSuccessful value),
     @required Result error(SignUpError value),
   });
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>(
-    Result $default(SignUp$ value), {
+  Result maybeMap<Result extends Object>({
+    Result start(SignUp$ value),
     Result successful(SignUpSuccessful value),
     Result error(SignUpError value),
     @required Result orElse(),
   });
+
+  $SignUpCopyWith<SignUp> get copyWith;
 }
 
 /// @nodoc
 abstract class $SignUpCopyWith<$Res> {
   factory $SignUpCopyWith(SignUp value, $Res Function(SignUp) then) =
       _$SignUpCopyWithImpl<$Res>;
+  $Res call({String pendingId});
 }
 
 /// @nodoc
@@ -924,13 +1044,29 @@ class _$SignUpCopyWithImpl<$Res> implements $SignUpCopyWith<$Res> {
   final SignUp _value;
   // ignore: unused_field
   final $Res Function(SignUp) _then;
+
+  @override
+  $Res call({
+    Object pendingId = freezed,
+  }) {
+    return _then(_value.copyWith(
+      pendingId: pendingId == freezed ? _value.pendingId : pendingId as String,
+    ));
+  }
 }
 
 /// @nodoc
-abstract class $SignUp$CopyWith<$Res> {
+abstract class $SignUp$CopyWith<$Res> implements $SignUpCopyWith<$Res> {
   factory $SignUp$CopyWith(SignUp$ value, $Res Function(SignUp$) then) =
       _$SignUp$CopyWithImpl<$Res>;
-  $Res call({String email, String password, String firstName, String lastName});
+  @override
+  $Res call(
+      {String email,
+      String password,
+      String firstName,
+      String lastName,
+      void Function(AppAction) result,
+      String pendingId});
 }
 
 /// @nodoc
@@ -948,15 +1084,23 @@ class _$SignUp$CopyWithImpl<$Res> extends _$SignUpCopyWithImpl<$Res>
     Object password = freezed,
     Object firstName = freezed,
     Object lastName = freezed,
+    Object result = freezed,
+    Object pendingId = freezed,
   }) {
     return _then(SignUp$(
       email: email == freezed ? _value.email : email as String,
       password: password == freezed ? _value.password : password as String,
       firstName: firstName == freezed ? _value.firstName : firstName as String,
       lastName: lastName == freezed ? _value.lastName : lastName as String,
+      result: result == freezed
+          ? _value.result
+          : result as void Function(AppAction),
+      pendingId: pendingId == freezed ? _value.pendingId : pendingId as String,
     ));
   }
 }
+
+@Implements(ActionStart)
 
 /// @nodoc
 class _$SignUp$ implements SignUp$ {
@@ -964,11 +1108,15 @@ class _$SignUp$ implements SignUp$ {
       {@required this.email,
       @required this.password,
       @required this.firstName,
-      @required this.lastName})
+      @required this.lastName,
+      @required this.result,
+      this.pendingId = _kSignUpPendingId})
       : assert(email != null),
         assert(password != null),
         assert(firstName != null),
-        assert(lastName != null);
+        assert(lastName != null),
+        assert(result != null),
+        assert(pendingId != null);
 
   @override
   final String email;
@@ -978,10 +1126,15 @@ class _$SignUp$ implements SignUp$ {
   final String firstName;
   @override
   final String lastName;
+  @override
+  final void Function(AppAction) result;
+  @JsonKey(defaultValue: _kSignUpPendingId)
+  @override
+  final String pendingId;
 
   @override
   String toString() {
-    return 'SignUp(email: $email, password: $password, firstName: $firstName, lastName: $lastName)';
+    return 'SignUp.start(email: $email, password: $password, firstName: $firstName, lastName: $lastName, result: $result, pendingId: $pendingId)';
   }
 
   @override
@@ -998,7 +1151,12 @@ class _$SignUp$ implements SignUp$ {
                     .equals(other.firstName, firstName)) &&
             (identical(other.lastName, lastName) ||
                 const DeepCollectionEquality()
-                    .equals(other.lastName, lastName)));
+                    .equals(other.lastName, lastName)) &&
+            (identical(other.result, result) ||
+                const DeepCollectionEquality().equals(other.result, result)) &&
+            (identical(other.pendingId, pendingId) ||
+                const DeepCollectionEquality()
+                    .equals(other.pendingId, pendingId)));
   }
 
   @override
@@ -1007,7 +1165,9 @@ class _$SignUp$ implements SignUp$ {
       const DeepCollectionEquality().hash(email) ^
       const DeepCollectionEquality().hash(password) ^
       const DeepCollectionEquality().hash(firstName) ^
-      const DeepCollectionEquality().hash(lastName);
+      const DeepCollectionEquality().hash(lastName) ^
+      const DeepCollectionEquality().hash(result) ^
+      const DeepCollectionEquality().hash(pendingId);
 
   @override
   $SignUp$CopyWith<SignUp$> get copyWith =>
@@ -1015,83 +1175,92 @@ class _$SignUp$ implements SignUp$ {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>(
-    Result $default(
-        String email, String password, String firstName, String lastName), {
-    @required Result successful(AppUser user),
-    @required Result error(Object error),
+  Result when<Result extends Object>({
+    @required
+        Result start(String email, String password, String firstName,
+            String lastName, void Function(AppAction) result, String pendingId),
+    @required Result successful(AppUser user, String pendingId),
+    @required Result error(Object error, String pendingId),
   }) {
-    assert($default != null);
+    assert(start != null);
     assert(successful != null);
     assert(error != null);
-    return $default(email, password, firstName, lastName);
+    return start(email, password, firstName, lastName, result, pendingId);
   }
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>(
-    Result $default(
-        String email, String password, String firstName, String lastName), {
-    Result successful(AppUser user),
-    Result error(Object error),
+  Result maybeWhen<Result extends Object>({
+    Result start(String email, String password, String firstName,
+        String lastName, void Function(AppAction) result, String pendingId),
+    Result successful(AppUser user, String pendingId),
+    Result error(Object error, String pendingId),
     @required Result orElse(),
   }) {
     assert(orElse != null);
-    if ($default != null) {
-      return $default(email, password, firstName, lastName);
+    if (start != null) {
+      return start(email, password, firstName, lastName, result, pendingId);
     }
     return orElse();
   }
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>(
-    Result $default(SignUp$ value), {
+  Result map<Result extends Object>({
+    @required Result start(SignUp$ value),
     @required Result successful(SignUpSuccessful value),
     @required Result error(SignUpError value),
   }) {
-    assert($default != null);
+    assert(start != null);
     assert(successful != null);
     assert(error != null);
-    return $default(this);
+    return start(this);
   }
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>(
-    Result $default(SignUp$ value), {
+  Result maybeMap<Result extends Object>({
+    Result start(SignUp$ value),
     Result successful(SignUpSuccessful value),
     Result error(SignUpError value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
-    if ($default != null) {
-      return $default(this);
+    if (start != null) {
+      return start(this);
     }
     return orElse();
   }
 }
 
-abstract class SignUp$ implements SignUp {
+abstract class SignUp$ implements SignUp, ActionStart {
   const factory SignUp$(
       {@required String email,
       @required String password,
       @required String firstName,
-      @required String lastName}) = _$SignUp$;
+      @required String lastName,
+      @required void Function(AppAction) result,
+      String pendingId}) = _$SignUp$;
 
   String get email;
   String get password;
   String get firstName;
   String get lastName;
+  void Function(AppAction) get result;
+  @override
+  String get pendingId;
+  @override
   $SignUp$CopyWith<SignUp$> get copyWith;
 }
 
 /// @nodoc
-abstract class $SignUpSuccessfulCopyWith<$Res> {
+abstract class $SignUpSuccessfulCopyWith<$Res>
+    implements $SignUpCopyWith<$Res> {
   factory $SignUpSuccessfulCopyWith(
           SignUpSuccessful value, $Res Function(SignUpSuccessful) then) =
       _$SignUpSuccessfulCopyWithImpl<$Res>;
-  $Res call({AppUser user});
+  @override
+  $Res call({AppUser user, String pendingId});
 }
 
 /// @nodoc
@@ -1107,25 +1276,32 @@ class _$SignUpSuccessfulCopyWithImpl<$Res> extends _$SignUpCopyWithImpl<$Res>
   @override
   $Res call({
     Object user = freezed,
+    Object pendingId = freezed,
   }) {
     return _then(SignUpSuccessful(
       user == freezed ? _value.user : user as AppUser,
+      pendingId == freezed ? _value.pendingId : pendingId as String,
     ));
   }
 }
 
-@Implements(UserAction)
+@Implements(ActionDone)
 
 /// @nodoc
 class _$SignUpSuccessful implements SignUpSuccessful {
-  const _$SignUpSuccessful(this.user) : assert(user != null);
+  const _$SignUpSuccessful(this.user, [this.pendingId = _kSignUpPendingId])
+      : assert(user != null),
+        assert(pendingId != null);
 
   @override
   final AppUser user;
+  @JsonKey(defaultValue: _kSignUpPendingId)
+  @override
+  final String pendingId;
 
   @override
   String toString() {
-    return 'SignUp.successful(user: $user)';
+    return 'SignUp.successful(user: $user, pendingId: $pendingId)';
   }
 
   @override
@@ -1133,12 +1309,17 @@ class _$SignUpSuccessful implements SignUpSuccessful {
     return identical(this, other) ||
         (other is SignUpSuccessful &&
             (identical(other.user, user) ||
-                const DeepCollectionEquality().equals(other.user, user)));
+                const DeepCollectionEquality().equals(other.user, user)) &&
+            (identical(other.pendingId, pendingId) ||
+                const DeepCollectionEquality()
+                    .equals(other.pendingId, pendingId)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(user);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(user) ^
+      const DeepCollectionEquality().hash(pendingId);
 
   @override
   $SignUpSuccessfulCopyWith<SignUpSuccessful> get copyWith =>
@@ -1146,42 +1327,43 @@ class _$SignUpSuccessful implements SignUpSuccessful {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>(
-    Result $default(
-        String email, String password, String firstName, String lastName), {
-    @required Result successful(AppUser user),
-    @required Result error(Object error),
+  Result when<Result extends Object>({
+    @required
+        Result start(String email, String password, String firstName,
+            String lastName, void Function(AppAction) result, String pendingId),
+    @required Result successful(AppUser user, String pendingId),
+    @required Result error(Object error, String pendingId),
   }) {
-    assert($default != null);
+    assert(start != null);
     assert(successful != null);
     assert(error != null);
-    return successful(user);
+    return successful(user, pendingId);
   }
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>(
-    Result $default(
-        String email, String password, String firstName, String lastName), {
-    Result successful(AppUser user),
-    Result error(Object error),
+  Result maybeWhen<Result extends Object>({
+    Result start(String email, String password, String firstName,
+        String lastName, void Function(AppAction) result, String pendingId),
+    Result successful(AppUser user, String pendingId),
+    Result error(Object error, String pendingId),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (successful != null) {
-      return successful(user);
+      return successful(user, pendingId);
     }
     return orElse();
   }
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>(
-    Result $default(SignUp$ value), {
+  Result map<Result extends Object>({
+    @required Result start(SignUp$ value),
     @required Result successful(SignUpSuccessful value),
     @required Result error(SignUpError value),
   }) {
-    assert($default != null);
+    assert(start != null);
     assert(successful != null);
     assert(error != null);
     return successful(this);
@@ -1189,8 +1371,8 @@ class _$SignUpSuccessful implements SignUpSuccessful {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>(
-    Result $default(SignUp$ value), {
+  Result maybeMap<Result extends Object>({
+    Result start(SignUp$ value),
     Result successful(SignUpSuccessful value),
     Result error(SignUpError value),
     @required Result orElse(),
@@ -1203,19 +1385,24 @@ class _$SignUpSuccessful implements SignUpSuccessful {
   }
 }
 
-abstract class SignUpSuccessful implements SignUp, UserAction {
-  const factory SignUpSuccessful(AppUser user) = _$SignUpSuccessful;
+abstract class SignUpSuccessful implements SignUp, ActionDone {
+  const factory SignUpSuccessful(AppUser user, [String pendingId]) =
+      _$SignUpSuccessful;
 
   AppUser get user;
+  @override
+  String get pendingId;
+  @override
   $SignUpSuccessfulCopyWith<SignUpSuccessful> get copyWith;
 }
 
 /// @nodoc
-abstract class $SignUpErrorCopyWith<$Res> {
+abstract class $SignUpErrorCopyWith<$Res> implements $SignUpCopyWith<$Res> {
   factory $SignUpErrorCopyWith(
           SignUpError value, $Res Function(SignUpError) then) =
       _$SignUpErrorCopyWithImpl<$Res>;
-  $Res call({Object error});
+  @override
+  $Res call({Object error, String pendingId});
 }
 
 /// @nodoc
@@ -1231,25 +1418,33 @@ class _$SignUpErrorCopyWithImpl<$Res> extends _$SignUpCopyWithImpl<$Res>
   @override
   $Res call({
     Object error = freezed,
+    Object pendingId = freezed,
   }) {
     return _then(SignUpError(
       error == freezed ? _value.error : error,
+      pendingId == freezed ? _value.pendingId : pendingId as String,
     ));
   }
 }
 
+@Implements(ActionDone)
 @Implements(ErrorAction)
 
 /// @nodoc
 class _$SignUpError implements SignUpError {
-  const _$SignUpError(this.error) : assert(error != null);
+  const _$SignUpError(this.error, [this.pendingId = _kSignUpPendingId])
+      : assert(error != null),
+        assert(pendingId != null);
 
   @override
   final Object error;
+  @JsonKey(defaultValue: _kSignUpPendingId)
+  @override
+  final String pendingId;
 
   @override
   String toString() {
-    return 'SignUp.error(error: $error)';
+    return 'SignUp.error(error: $error, pendingId: $pendingId)';
   }
 
   @override
@@ -1257,12 +1452,17 @@ class _$SignUpError implements SignUpError {
     return identical(this, other) ||
         (other is SignUpError &&
             (identical(other.error, error) ||
-                const DeepCollectionEquality().equals(other.error, error)));
+                const DeepCollectionEquality().equals(other.error, error)) &&
+            (identical(other.pendingId, pendingId) ||
+                const DeepCollectionEquality()
+                    .equals(other.pendingId, pendingId)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(error);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(error) ^
+      const DeepCollectionEquality().hash(pendingId);
 
   @override
   $SignUpErrorCopyWith<SignUpError> get copyWith =>
@@ -1270,42 +1470,43 @@ class _$SignUpError implements SignUpError {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>(
-    Result $default(
-        String email, String password, String firstName, String lastName), {
-    @required Result successful(AppUser user),
-    @required Result error(Object error),
+  Result when<Result extends Object>({
+    @required
+        Result start(String email, String password, String firstName,
+            String lastName, void Function(AppAction) result, String pendingId),
+    @required Result successful(AppUser user, String pendingId),
+    @required Result error(Object error, String pendingId),
   }) {
-    assert($default != null);
+    assert(start != null);
     assert(successful != null);
     assert(error != null);
-    return error(this.error);
+    return error(this.error, pendingId);
   }
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>(
-    Result $default(
-        String email, String password, String firstName, String lastName), {
-    Result successful(AppUser user),
-    Result error(Object error),
+  Result maybeWhen<Result extends Object>({
+    Result start(String email, String password, String firstName,
+        String lastName, void Function(AppAction) result, String pendingId),
+    Result successful(AppUser user, String pendingId),
+    Result error(Object error, String pendingId),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (error != null) {
-      return error(this.error);
+      return error(this.error, pendingId);
     }
     return orElse();
   }
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>(
-    Result $default(SignUp$ value), {
+  Result map<Result extends Object>({
+    @required Result start(SignUp$ value),
     @required Result successful(SignUpSuccessful value),
     @required Result error(SignUpError value),
   }) {
-    assert($default != null);
+    assert(start != null);
     assert(successful != null);
     assert(error != null);
     return error(this);
@@ -1313,8 +1514,8 @@ class _$SignUpError implements SignUpError {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>(
-    Result $default(SignUp$ value), {
+  Result maybeMap<Result extends Object>({
+    Result start(SignUp$ value),
     Result successful(SignUpSuccessful value),
     Result error(SignUpError value),
     @required Result orElse(),
@@ -1327,10 +1528,13 @@ class _$SignUpError implements SignUpError {
   }
 }
 
-abstract class SignUpError implements SignUp, ErrorAction {
-  const factory SignUpError(Object error) = _$SignUpError;
+abstract class SignUpError implements SignUp, ActionDone, ErrorAction {
+  const factory SignUpError(Object error, [String pendingId]) = _$SignUpError;
 
   Object get error;
+  @override
+  String get pendingId;
+  @override
   $SignUpErrorCopyWith<SignUpError> get copyWith;
 }
 

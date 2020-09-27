@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:yatp/src/actions/index.dart';
+import 'package:yatp/src/containers/is_signing_up_container.dart';
 import 'package:yatp/src/models/index.dart';
 import 'package:yatp/src/presentation/app_routes.dart';
 
@@ -18,11 +19,12 @@ class _SignUpPageState extends State<SignUpPage> {
   void _onSubmit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      StoreProvider.of<AppState>(context).dispatch(SignUp(
+      StoreProvider.of<AppState>(context).dispatch(SignUp.start(
         email: _email,
         password: _password,
         firstName: _firstName,
         lastName: _lastName,
+        result: (AppAction action) {},
       ));
     }
   }
@@ -105,17 +107,26 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
               const SizedBox(height: 16.0),
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                width: MediaQuery.of(context).size.width,
-                child: RaisedButton(
-                  onPressed: _onSubmit,
-                  child: Text(
-                    'Sign Up',
-                    style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.black),
-                  ),
-                  color: Colors.white,
-                ),
+              IsSigningUpContainer(
+                builder: (BuildContext context, bool isLoading) {
+                  if (isLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return Container(
+                    padding: const EdgeInsets.all(16.0),
+                    width: MediaQuery.of(context).size.width,
+                    child: RaisedButton(
+                      onPressed: _onSubmit,
+                      child: Text(
+                        'Sign Up',
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.black),
+                      ),
+                      color: Colors.white,
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 8.0),
               Container(

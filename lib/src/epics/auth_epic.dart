@@ -30,7 +30,8 @@ class AuthEpic {
             )
             .asStream()
             .map<AppAction>((AppUser user) => Login.successful(user))
-            .onErrorReturnWith((dynamic error) => Login.error(error)));
+            .onErrorReturnWith((dynamic error) => Login.error(error))
+            .doOnData(action.result));
   }
 
   Stream<AppAction> _updateUserDetails(Stream<UpdateUserDetails$> actions, EpicStore<AppState> store) {
@@ -53,7 +54,8 @@ class AuthEpic {
             )
             .asStream()
             .map<AppAction>((AppUser user) => SignUp.successful(user))
-            .onErrorReturnWith((dynamic error) => SignUp.error(error)));
+            .onErrorReturnWith((dynamic error) => SignUp.error(error))
+            .doOnData(action.result));
   }
 
   Stream<AppAction> _logout(Stream<Logout$> actions, EpicStore<AppState> store) {

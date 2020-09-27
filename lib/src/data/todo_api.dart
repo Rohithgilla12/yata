@@ -26,7 +26,7 @@ class TodoApi {
     await ref.set(todo.json);
   }
 
-  Future<void> updateTodo(Todo todo) async {
+  Future<void> completeTodo(Todo todo) async {
     todo = todo.rebuild((TodoBuilder b) => b.status = !b.status);
     await _store.doc('todos/${todo.id}').set(todo.json);
   }

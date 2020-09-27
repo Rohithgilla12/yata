@@ -16,6 +16,7 @@ class TodoEpic {
   Epic<AppState> get epics {
     return combineEpics(<Epic<AppState>>[
       TypedEpic<AppState, CreateTodo$>(_createTodo),
+      TypedEpic<AppState, CompleteTodo$>(_completeTodo),
       _listenForTodos,
     ]);
   }
@@ -41,6 +42,16 @@ class TodoEpic {
                   const CreateTodo.successful(),
                 ])
             .onErrorReturnWith((dynamic error) => CreateTodo.error(error))
+            .doOnData(action.result));
+  }
+
+  Stream<AppAction> _completeTodo(Stream<CompleteTodo$> actions, EpicStore<AppState> store) {
+    return actions //
+        .flatMap((CompleteTodo$ action) => _todoApi
+            .completeTodo(action.todo)
+            .asStream()
+            .mapTo(const CompleteTodo.successful())
+            .onErrorReturnWith((dynamic error) => CompleteTodo.error(error))
             .doOnData(action.result));
   }
 }

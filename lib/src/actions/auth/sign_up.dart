@@ -1,17 +1,31 @@
 part of auth_actions;
 
+const String _kSignUpPendingId = 'SignUp';
+
 @freezed
 abstract class SignUp with _$SignUp implements AppAction {
-  const factory SignUp({
+  @Implements(ActionStart)
+  const factory SignUp.start({
     @required String email,
     @required String password,
     @required String firstName,
     @required String lastName,
+    @required ActionResult result,
+    @Default(_kSignUpPendingId) String pendingId,
   }) = SignUp$;
 
-  @Implements(UserAction)
-  const factory SignUp.successful(AppUser user) = SignUpSuccessful;
+  @Implements(ActionDone)
+  const factory SignUp.successful(
+    AppUser user, [
+    @Default(_kSignUpPendingId) String pendingId,
+  ]) = SignUpSuccessful;
 
+  @Implements(ActionDone)
   @Implements(ErrorAction)
-  const factory SignUp.error(Object error) = SignUpError;
+  const factory SignUp.error(
+    Object error, [
+    @Default(_kSignUpPendingId) String pendingId,
+  ]) = SignUpError;
+
+  static String get pendingKey => _kSignUpPendingId;
 }
