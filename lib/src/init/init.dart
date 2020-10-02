@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
@@ -16,6 +17,8 @@ import 'package:yatp/src/reducers/reducer.dart';
 
 Future<Store<AppState>> init() async {
   await Firebase.initializeApp();
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
   final FirebaseFirestore firebaseInstance = FirebaseFirestore.instance;
   final AuthApi authApi = AuthApi(

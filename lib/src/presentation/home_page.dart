@@ -55,76 +55,80 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Welcome'),
-      ),
-      body: UserContainer(
-        builder: (BuildContext context, AppUser user) {
-          return TodosContainer(
-            builder: (BuildContext context, List<Todo> todos) {
-              return Container(
-                height: MediaQuery.of(context).size.height,
-                child: RepaintBoundary(
-                  key: previewContainer,
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: todos.length,
-                            padding: const EdgeInsets.all(16.0),
-                            itemBuilder: (BuildContext context, int index) {
-                              final Todo todo = todos[index];
-                              if (todo.status) {
-                                return const SizedBox.shrink();
-                              }
-                              return ListTile(
-                                leading: IconButton(
-                                  onPressed: () {
-                                    StoreProvider.of<AppState>(context).dispatch(CompleteTodo.start(
-                                      todo: todo,
+    return UserContainer(
+      builder: (BuildContext context, AppUser user) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Welcome ${user.name}'),
+          ),
+          body: UserContainer(
+            builder: (BuildContext context, AppUser user) {
+              return TodosContainer(
+                builder: (BuildContext context, List<Todo> todos) {
+                  return Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: RepaintBoundary(
+                      key: previewContainer,
+                      child: Container(
+                        child: Column(
+                          children: <Widget>[
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: todos.length,
+                                padding: const EdgeInsets.all(16.0),
+                                itemBuilder: (BuildContext context, int index) {
+                                  final Todo todo = todos[index];
+                                  if (todo.status) {
+                                    return const SizedBox.shrink();
+                                  }
+                                  return ListTile(
+                                    leading: IconButton(
+                                      onPressed: () {
+                                        StoreProvider.of<AppState>(context).dispatch(CompleteTodo.start(
+                                          todo: todo,
+                                          result: _onResult,
+                                        ));
+                                      },
+                                      icon: const Icon(Icons.check_box_outline_blank),
+                                    ),
+                                    title: Text(
+                                      todo.text,
+                                      style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            TextField(
+                              controller: controller,
+                              textCapitalization: TextCapitalization.sentences,
+                              maxLines: 1,
+                              decoration: const InputDecoration(
+                                filled: true,
+                                hintText: 'Type your todo',
+                              ),
+                              onSubmitted: (String value) {
+                                if (controller.text.isNotEmpty) {
+                                  StoreProvider.of<AppState>(context).dispatch(
+                                    CreateTodo.start(
+                                      text: controller.text,
                                       result: _onResult,
-                                    ));
-                                  },
-                                  icon: const Icon(Icons.check_box_outline_blank),
-                                ),
-                                title: Text(
-                                  todo.text,
-                                  style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),
-                                ),
-                              );
-                            },
-                          ),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ],
                         ),
-                        TextField(
-                          controller: controller,
-                          textCapitalization: TextCapitalization.sentences,
-                          maxLines: 1,
-                          decoration: const InputDecoration(
-                            filled: true,
-                            hintText: 'Type your todo',
-                          ),
-                          onSubmitted: (String value) {
-                            if (controller.text.isNotEmpty) {
-                              StoreProvider.of<AppState>(context).dispatch(
-                                CreateTodo.start(
-                                  text: controller.text,
-                                  result: _onResult,
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               );
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
