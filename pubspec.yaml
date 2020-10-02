@@ -31,6 +31,7 @@ dependencies:
   flutter_cache_manager: ^1.4.2
   image_gallery_saver: ^1.5.0
   flutter_slidable: ^0.5.7
+  firebase_crashlytics: ^0.2.1
   intl: ^0.16.1
 
 
