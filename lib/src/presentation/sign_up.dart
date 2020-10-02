@@ -24,7 +24,11 @@ class _SignUpPageState extends State<SignUpPage> {
         password: _password,
         firstName: _firstName,
         lastName: _lastName,
-        result: (AppAction action) {},
+        result: (AppAction action) {
+          if (action is SignUpSuccessful) {
+            Navigator.pop(context);
+          }
+        },
       ));
     }
   }

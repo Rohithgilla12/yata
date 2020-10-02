@@ -58,15 +58,16 @@ class AuthApi {
       email: email,
       password: password,
     );
-    AppUser user = await getUser(userCredential.user.uid);
-    user = user.rebuild(
-      (AppUserBuilder b) => b
-        ..firstName = firstName
-        ..lastName = lastName,
-    );
+    final AppUser user = AppUser((AppUserBuilder b) {
+      b
+        ..uid = userCredential.user.uid
+        ..isCreated = true
+        ..email = email
+        ..lastName = lastName
+        ..firstName = firstName;
+    });
     await setUserDetails(user);
-    print('After updating AppUser : $user');
-    return getUser(user.uid);
+    return user;
   }
 
   Future<void> setUserDetails(AppUser user) async {
